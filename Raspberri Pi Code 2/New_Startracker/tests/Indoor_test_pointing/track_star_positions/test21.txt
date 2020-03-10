@@ -1,0 +1,3 @@
+Capture Time: 4.76837158203e-06
+Processing Time: 0.141027927399
+Total Time: 0.143044948578

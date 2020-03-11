@@ -42,7 +42,8 @@ start = time()
 ####################################################################
 success_count = 0
 total_count = 0
-stars_text_file = sys.argv[5] # text file name with lastest star position data (put a text file and argv in unit_test.sh for it)
+# don't need a star text file anymore
+#stars_text_file = sys.argv[5] # text file name with lastest star position data (put a text file and argv in unit_test.sh for it)
 stars = None     # latest constellation
 
 # Loop awaiting input

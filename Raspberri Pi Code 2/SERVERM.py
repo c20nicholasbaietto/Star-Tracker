@@ -18,7 +18,7 @@ CommL = bytearray(b'l')
 CommT = bytearray(b't')
 CommC = bytearray(b'c')
 CommR = bytearray(b'r')
-AddF = bytearray(b'f') #create byte array for sender address
+AddF  = bytearray(b'f') #create byte array for sender address
 prevC = bytearray(b'n') #create a byte array for prev. command
 
 while con=='y':

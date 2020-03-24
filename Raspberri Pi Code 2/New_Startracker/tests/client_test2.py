@@ -16,11 +16,6 @@ import ctypes
 import serial
 import struct
 
-###### when taking actual pictures, uncomment the code below #######
-#import picamera
-#from cam import set_camera_specs, take_picture
-####################################################################
-
 os.system("pwd")
 file_path = sys.argv[1]
 CONFIGFILE = sys.argv[2]
@@ -28,7 +23,13 @@ YEAR = float(sys.argv[3])
 MEDIAN_IMAGE = cv2.imread(sys.argv[4])
 command = sys.argv[6]
 num_stars = int(sys.argv[7])
+is_serial = bool(sys.argv[8])
+take_pic = bool(sys.argv[9])
 my_star_db = startracker.set_up(CONFIGFILE, YEAR)
+
+if take_pic:
+	import picamera
+	from cam import set_camera_specs, take_picture
 
 COM_Port = serial.Serial("/dev/ttyS0", baudrate=9600, bytesize =8,parity = 'N', stopbits =1,timeout=300) #open serial port
 
@@ -42,7 +43,8 @@ start = time()
 ####################################################################
 success_count = 0
 total_count = 0
-stars_text_file = sys.argv[5] # text file name with lastest star position data (put a text file and argv in unit_test.sh for it)
+# don't need a star text file anymore
+#stars_text_file = sys.argv[5] # text file name with lastest star position data (put a text file and argv in unit_test.sh for it)
 stars = None     # latest constellation
 
 # Loop awaiting input
@@ -59,7 +61,8 @@ while True:
     image_text = file_path + "/test" + str(pic_num-1) + ".txt" # text file name with useful data (still working on not getting the last image)
     text_file = open(image_text,"w+") # create a text file to write to
     before_capture_time = time()
-    #take_picture(camera, image_name)
+    if take_pic:
+		take_picture(camera, image_name)
     after_capture_time = time()
     ####################################################################
     
@@ -90,17 +93,12 @@ while True:
             q2 = float(reply[5])
             q3 = float(reply[6])
             q4 = float(reply[7])
-        
-            #print(time())
+            
             my_star_string = ""
             for i in range(len(new_stars)):
                 if my_star_string is not "":
                     my_star_string += ","
                 my_star_string+="("+str(new_stars[i][0])+","+str(new_stars[i][1])+")"
-            #stars_text = open(stars_text_file,"w") # open the stars.txt file to write to
-            #stars_text.write(my_star_string)
-            ##stars_text.close()
-            #print(time())
             
             q = "Quaternian: " + str(reply[0])
             DEC = "DEC: " + str(reply[1])
@@ -117,18 +115,18 @@ while True:
             text_file.write(ORI+"\n")
             text_file.write("Stars: "+my_star_string+"\n")
             
-            ############################ RS485 Code
-            print('creating serial command')
             
-            
-            data = ctypes.create_string_buffer(28)  
-            
-            #struct.pack_into('ffffffff',data,0,DEC,RA,ORI,QUA1,QUA2,QUA3,QUA4,time)
-            struct.pack_into('fffffff',data,0,q1,q2,q3,q4,DEC1,RA1,ORI1)
-            print('sending serial command')
-            
-            COM_Port.write(data)
-            ######################################
+            if is_serial:
+				print('creating serial command')
+				
+				
+				data = ctypes.create_string_buffer(28)  
+				
+				#struct.pack_into('ffffffff',data,0,DEC,RA,ORI,QUA1,QUA2,QUA3,QUA4,time)
+				struct.pack_into('fffffff',data,0,q1,q2,q3,q4,DEC1,RA1,ORI1)
+				print('sending serial command')
+				
+				COM_Port.write(data)
             
             #print(time())
             success_count += 1

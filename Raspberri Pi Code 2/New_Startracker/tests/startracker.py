@@ -221,6 +221,7 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
         lis = beast.db_match(C_DB, img_const_n_brightest)
         # print(lis)
     stars = []
+    t_const = []
     # print(num_stars)
     if num_stars > img_stars_n_brightest.size():
         num_stars = img_stars_n_brightest.size()
@@ -229,6 +230,9 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
         # print("star" + str(i) + ": (" + str(img_stars_n_brightest.get_star(i).px) + ", " + str(img_stars_n_brightest.get_star(i).py) + ")")
         if i < num_stars:
             stars.append((img_stars_n_brightest.get_star(i).px, img_stars_n_brightest.get_star(i).py))
+
+    #for i in range(img_const_n_brightest.size()):
+     #   t_const.append(img_const_n_brightest.__getattr__)
 
     myElapsedTime1 = time() - start_time
     # print("Process Time Before Search = " + str(myElapsedTime1))

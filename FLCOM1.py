@@ -34,17 +34,17 @@ def signoff():
 Comm = ctypes.create_string_buffer(3) #creates var to send command with
 data = ctypes.create_string_buffer(32) #creates var for read back data
 
-con = 'y' # initialise continue var
+con   = 'y' # initialise continue var
 cont = 'y' 
-# n:no last command, i:idle, l:lis, t:tracking, c:calibration
+# n:no last command, i:idle, l:lis, t:tracking, c:calibration r: reboot
 CommN = b'n' #create byte array for commands
 CommI = b'i'
 CommL = b'l'
 CommT = b't'
 CommC = b'c'
 CommR = b'r '
-AddF = b'f' #create byte array for sender address
-prevC = b'n' #create a byte array for prev. command
+AddrF = b'f' #create byte array for sender address
+CurrC = b'n' #create a byte array for prev. command
 
 comm_banner()
 counter = 0
@@ -55,29 +55,35 @@ while con=='y':
     image_text = file_path + "/test" + str(counter) + ".txt" # text file name with useful data
     text_file = open(image_text,"w+") # create a text file to write to
     
-    
     inputcomm = raw_input("Enter your desired command: ")
-    print(inputcomm)
     
-    if inputcomm == "1":        
-        struct.pack_into('ccc',Comm,0,AddF,prevC,CommI)
+    if inputcomm == "1":   # Idle command
+        struct.pack_into('ccc',Comm,0,AddrF,CurrC,CommI)
         COM_Port.write(Comm)
-        
-    elif inputcomm == "2":
-        struct.pack_into('ccc',Comm,0,AddF,prevC,CommC)
+        CurrC = b'i'
+        print('Idle Command sent')
+            
+    elif inputcomm == "2": # Calibrate command
+        struct.pack_into('ccc',Comm,0,AddrF,CurrC,CommC)
         COM_Port.write(Comm)
-        
-    elif inputcomm == "3":
-        struct.pack_into('ccc',Comm,0,AddF,prevC,CommL)
+        CurrC = b'c'
+        print('Calibrate Command sent')
+            
+    elif inputcomm == "3": # LIS command
+        struct.pack_into('ccc',Comm,0,AddrF,CurrC,CommL)
         COM_Port.write(Comm)
+        print('LIS Command sent')
         data = COM_Port.read(28)
         dataRet = struct.unpack_from('fffffff',data,0)
         print(dataRet)
         text_file.write('Orientation Received {0}'.format(dataRet))
-        
-    elif inputcomm == "4":
-        struct.pack_into('ccc',Comm,0,AddF,prevC,CommT)
+        CurrC = b'l'
+            
+    elif inputcomm == "4": # tracking mode command
+        struct.pack_into('ccc',Comm,0,AddrF,CurrC,CommT)
         COM_Port.write(Comm)
+        CurrC = b't'
+        print('Tracking Command sent')
         
         while cont == 'y':
             data = COM_Port.read(28)
@@ -86,18 +92,20 @@ while con=='y':
             print(dataRet)
             text_file.write('Orientation Received {0}'.format(dataRet))
             cont = raw_input("Would you like to continue tracking? y or n: ")
-        struct.pack_into('ccc',Comm,0,AddF,prevC,1)
+        struct.pack_into('ccc',Comm,0,AddrF,CurrC,CommI)
         COM_Port.write(Comm)
         
-    elif inputcomm == "5":
-        struct.pack_into('ccc',Comm,0,AddF,prevC,CommR)
+    elif inputcomm == "5": # Off command
+        struct.pack_into('ccc',Comm,0,AddrF,CurrC,CommR)
         COM_Port.write(Comm)
+        CurrC = b'n'
+        print('Off Command sent')
+        
     else:
         print("Command was not understood")
     
     text_file.close()
     con = raw_input("Would you like to send another command? y or n: ")
-    print(con)
     cont = 'y'
 
 COM_Port.write(signoff) 

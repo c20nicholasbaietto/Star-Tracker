@@ -61,7 +61,7 @@ if [[ $CLIENT_TEST == 1 ]]; then
 	# 'mode' 'num of cropped stars' 'seial connection'
 	#time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt track 5 || exit # serial connection
 	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt \
-	track 5 False False || exit # non-serial connection
+	track 5 0 0 || exit # non-serial connection
 fi
 
 if [[ $CALIBRATECAL == 1 ]]; then

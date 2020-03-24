@@ -23,8 +23,8 @@ YEAR = float(sys.argv[3])
 MEDIAN_IMAGE = cv2.imread(sys.argv[4])
 command = sys.argv[6]
 num_stars = int(sys.argv[7])
-is_serial = bool(sys.argv[8])
-take_pic = bool(sys.argv[9])
+is_serial = bool(int(sys.argv[8]))
+take_pic = bool(int(sys.argv[9]))
 my_star_db = startracker.set_up(CONFIGFILE, YEAR)
 
 if take_pic:

@@ -47,5 +47,4 @@ while con=='y':
         os.system("shutdown /s /t 1")
     else:
         print('Command Not Understood')
-    
 

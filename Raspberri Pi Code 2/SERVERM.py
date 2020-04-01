@@ -31,16 +31,17 @@ while con=='y':
     prevC = CommRec[1]
     CommB = CommRec[2]
     num_stars = 5 # number of stars used in tracking mode
+    serial = 1 # using serial connection
     
     if CommB == b'i':        
         print('Recieved Idle command')
         continue
     elif CommB == b'l':
         print('Recieved LIS command')
-        cmd = "./unit_test.sh -i Indoor_test_pointing " + str(num_stars)
+        cmd = "./unit_test.sh -i Indoor_test_pointing " + str(num_stars) + " " + str(serial)
     elif CommB == b't':
         print('Recieved Tracking command')
-        cmd = "./unit_test.sh -t Indoor_test_pointing " + str(num_stars)
+        cmd = "./unit_test.sh -t Indoor_test_pointing " + str(num_stars) + " " + str(serial)
     elif CommB == b'c':
         print('Recieved Calibrate command')
         cmd = "./unit_test.sh -c Indoor_test_pointing"

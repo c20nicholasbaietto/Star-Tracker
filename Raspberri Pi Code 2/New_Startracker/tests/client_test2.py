@@ -21,10 +21,11 @@ file_path = sys.argv[1]
 CONFIGFILE = sys.argv[2]
 YEAR = float(sys.argv[3])
 MEDIAN_IMAGE = cv2.imread(sys.argv[4])
-command = sys.argv[6]
-num_stars = int(sys.argv[7])
-is_serial = bool(int(sys.argv[8]))
-take_pic = bool(int(sys.argv[9]))
+command = sys.argv[5]
+num_stars = int(sys.argv[6])
+is_serial = bool(int(sys.argv[7]))
+take_pic = bool(int(sys.argv[8]))
+crop = bool(int(sys.argv[9]))
 my_star_db = startracker.set_up(CONFIGFILE, YEAR)
 
 if take_pic:
@@ -76,7 +77,7 @@ while True:
         data = image_name.strip()  # Remove stray whitespace
         before_process_time = time()
         my_reply = startracker.solve_image(file_path, data, pic_num, MEDIAN_IMAGE, my_star_db, stars,
-                                           num_stars)  # solve the image
+                                           num_stars, crop)  # solve the image
         after_process_time = time()
         total_count += 1
         if type(my_reply) is tuple:  # if the image was solved, this will be true

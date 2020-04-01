@@ -41,7 +41,10 @@ if [ ! -d "$TESTDIR" ]; then
 	exit
 fi
 
-#data="$2" (access using $data)
+NUM_STARS="$2" # number of stars cropped in tracking mode
+SERIAL="$3" # are you sending data back over a serial connection? (1 = yes, 0 = no)
+TAKE_PIC=0 # are you using the camera to take pictures? (1 = yes, 0 = no)
+CROP=1 # are you cropping images for tracking mode? (1 = yes, 0 = no)
 
 shift
 
@@ -58,10 +61,10 @@ fi
 
 if [[ $CLIENT_TEST == 1 ]]; then
 	#time python2.7 'code being run' 'directory of stars' 'calibration text' 'year' 'median image' 'star text file'
-	# 'mode' 'num of cropped stars' 'seial connection'
-	#time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt track 5 || exit # serial connection
-	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt \
-	track 5 0 0 || exit # non-serial connection
+	# 'mode' 'num of cropped stars' 'seial connection' 'crop image'
+	
+	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png \
+	track $NUM_STARS $SERIAL $TAKE_PIC $CROP || exit
 fi
 
 if [[ $CALIBRATECAL == 1 ]]; then
@@ -69,9 +72,11 @@ if [[ $CALIBRATECAL == 1 ]]; then
 fi
 
 if [[ $IMG_TEST == 1 ]]; then
-	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt lis 5 || exit
-	#python2.7 startracker.py $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png
-	#xfce4-terminal --tab --execute python2.7  client.py
+	#time python2.7 'code being run' 'directory of stars' 'calibration text' 'year' 'median image' 'star text file'
+	# 'mode' 'num of cropped stars' 'seial connection' 'crop image'
+	
+	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png \
+	lis $NUM_STARS $SERIAL $TAKE_PIC 0 || exit
 fi
 
 #if [[ $TRACK == 1 ]]; then

@@ -17,9 +17,6 @@ import socket
 import numpy as np
 import beast
 
-# if "cropping" the images make the below true?
-my_track = True
-
 # Prepare constants and get system arguments
 P_MATCH_THRESH = 0.99
 
@@ -114,7 +111,7 @@ def check_image(img):
 
 
 # Solution function
-def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_position, num_stars):
+def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_position, num_stars, my_track):
     # Keep track of solution time
     # print(time())
     start_time = time()
@@ -209,10 +206,6 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
             # The center pixel is used as the approximation of the brightest pixel
             img_stars += beast.star(cx - width / 2.0, (cy - height / 2.0),
                                     float(cv2.getRectSubPix(img_grey, (1, 1), (cx, cy))[0, 0]), -1)
-            # img_stars += beast.star(cx - beast.cvar.IMG_X / 2.0, (cy - beast.cvar.IMG_Y / 2.0), float(cv2.getRectSubPix(img_grey, (1,1), (cx,cy))[0,0]), -1) # (old code)
-            # print("cx: " + str(cx))
-            # print("IMG_X: " + str(beast.cvar.IMG_X))
-            # print(img_stars)
 
         # For the first pass, we only want to use the brightest MAX_FALSE_STARS + REQUIRED_STARS
         img_stars_n_brightest = img_stars.copy_n_brightest(beast.cvar.MAX_FALSE_STARS + beast.cvar.REQUIRED_STARS)
@@ -231,9 +224,6 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
         if i < num_stars:
             stars.append((img_stars_n_brightest.get_star(i).px, img_stars_n_brightest.get_star(i).py))
 
-    #for i in range(img_const_n_brightest.size()):
-     #   t_const.append(img_const_n_brightest.__getattr__)
-
     myElapsedTime1 = time() - start_time
     # print("Process Time Before Search = " + str(myElapsedTime1))
     # Generate the match
@@ -243,32 +233,6 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
         y = lis.winner.R21
         z = lis.winner.R31
         r = beast.cvar.MAXFOV / 2
-
-        stars_x = lis.winner.img_mask.s_px
-        stars_y = lis.winner.img_mask.s_py
-
-        star = lis.winner.from_match()
-        # print(lis.winner.size())
-        # print("here goes nothing: " + str(star.get_star(0).px) + "," + str(star.get_star(0).py))
-        # print("here goes nothing: " + str(star.get_star(1).px) + "," + str(star.get_star(1).py))
-        # print("here goes nothing: " + str(star.get_star(2).px) + "," + str(star.get_star(2).py))
-        # print("here goes nothing: " + str(star.get_star(3).px) + "," + str(star.get_star(3).py))
-        # print("here goes nothing: " + str(star.get_star(4).px) + "," + str(star.get_star(4).py))
-        # print("here goes nothing: " + str(star.get_star(5).px) + "," + str(star.get_star(5).py))
-        # print("here goes nothing: " + str(star.get_star(6).px) + "," + str(star.get_star(6).py))
-        # print("here goes nothing: " + str(star.get_star(7).px) + "," + str(star.get_star(7).py))
-        # print("here goes nothing: " + str(star.get_star(8).px) + "," + str(star.get_star(8).py))
-
-        ### stars ###
-        # stars = []
-        for i in range(0, len(stars_x)):
-            stars.append((stars_x[i], stars_y[i]))
-        #############
-
-        # print("lis.winner.x_values = " + str(stars_x))
-        # print("lis.winner.y_values = " + str(stars_y))
-        # print("stars = " + str(stars))
-        ## print("x = " + str(x) + "\ny = " + str(y) + "\nz = " + str(z) +"\nr = " + str(r))
 
         SQ_RESULTS.kdsearch(x, y, z, r, beast.cvar.THRESH_FACTOR * beast.cvar.IMAGE_VARIANCE)
 

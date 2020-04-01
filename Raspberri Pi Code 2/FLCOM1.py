@@ -87,16 +87,15 @@ while con=='y':
         
         while cont == 'y':
             data = COM_Port.read(28)
-            print(data)
             dataRet = struct.unpack_from('fffffff',data,0)
             print(dataRet)
             text_file.write('Orientation Received {0}'.format(dataRet))
-            cont = raw_input("Would you like to continue tracking? y or n: ")
+            #cont = raw_input("Would you like to continue tracking? y or n: ")
         struct.pack_into('ccc',Comm,0,AddrF,CurrC,CommI)
         COM_Port.write(Comm)
         
     elif inputcomm == "5": # Off command
-        struct.pack_into('ccc',Comm,0,AddrF,CurrC,CommR)
+        struct.pack_into('ccc',Comm,0,AddrF,CurrC,CommR) # doesn't work
         COM_Port.write(Comm)
         CurrC = b'n'
         print('Off Command sent')

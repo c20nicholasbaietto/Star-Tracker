@@ -5,7 +5,6 @@
 # the SWIG interface file instead.
 
 from sys import version_info as _swig_python_version_info
-
 if _swig_python_version_info >= (2, 7, 0):
     def swig_import_helper():
         import importlib
@@ -15,8 +14,6 @@ if _swig_python_version_info >= (2, 7, 0):
             return importlib.import_module(mname)
         except ImportError:
             return importlib.import_module('_beast')
-
-
     _beast = swig_import_helper()
     del swig_import_helper
 elif _swig_python_version_info >= (2, 6, 0):
@@ -35,8 +32,6 @@ elif _swig_python_version_info >= (2, 6, 0):
             if fp is not None:
                 fp.close()
         return _mod
-
-
     _beast = swig_import_helper()
     del swig_import_helper
 else:
@@ -49,11 +44,9 @@ except NameError:
     pass  # Python < 2.2 doesn't have 'property'.
 
 try:
-    #import builtins as __builtin__
-    import __builtin__ as __builtin__
+    import builtins as __builtin__
 except ImportError:
     import __builtin__
-
 
 def _swig_setattr_nondynamic(self, class_type, name, value, static=1):
     if (name == "thisown"):
@@ -94,42 +87,28 @@ def _swig_repr(self):
         strthis = ""
     return "<%s.%s; %s >" % (self.__class__.__module__, self.__class__.__name__, strthis,)
 
-
 try:
     _object = object
     _newclass = 1
 except __builtin__.Exception:
     class _object:
         pass
-
-
     _newclass = 0
 
 PI = _beast.PI
 TWOPI = _beast.TWOPI
 
-
 def load_config(filename):
     return _beast.load_config(filename)
-
-
 load_config = _beast.load_config
-
 
 def xyz_hash(x, y, z):
     return _beast.xyz_hash(x, y, z)
-
-
 xyz_hash = _beast.xyz_hash
-
 
 def xyz_hash_mask(radians):
     return _beast.xyz_hash_mask(radians)
-
-
 xyz_hash_mask = _beast.xyz_hash_mask
-
-
 class star(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, star, name, value)
@@ -196,11 +175,8 @@ class star(_object):
 
     def DBG_(self, s):
         return _beast.star_DBG_(self, s)
-
     __swig_destroy__ = _beast.delete_star
     __del__ = lambda self: None
-
-
 star_swigregister = _beast.star_swigregister
 star_swigregister(star)
 cvar = _beast.cvar
@@ -208,60 +184,35 @@ cvar = _beast.cvar
 
 def star_gt_x(s1, s2):
     return _beast.star_gt_x(s1, s2)
-
-
 star_gt_x = _beast.star_gt_x
-
 
 def star_gt_y(s1, s2):
     return _beast.star_gt_y(s1, s2)
-
-
 star_gt_y = _beast.star_gt_y
-
 
 def star_gt_z(s1, s2):
     return _beast.star_gt_z(s1, s2)
-
-
 star_gt_z = _beast.star_gt_z
-
 
 def star_gt_flux(s1, s2):
     return _beast.star_gt_flux(s1, s2)
-
-
 star_gt_flux = _beast.star_gt_flux
-
 
 def star_lt_x(s1, s2):
     return _beast.star_lt_x(s1, s2)
-
-
 star_lt_x = _beast.star_lt_x
-
 
 def star_lt_y(s1, s2):
     return _beast.star_lt_y(s1, s2)
-
-
 star_lt_y = _beast.star_lt_y
-
 
 def star_lt_z(s1, s2):
     return _beast.star_lt_z(s1, s2)
-
-
 star_lt_z = _beast.star_lt_z
-
 
 def star_lt_flux(s1, s2):
     return _beast.star_lt_flux(s1, s2)
-
-
 star_lt_flux = _beast.star_lt_flux
-
-
 class star_db(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, star_db, name, value)
@@ -279,7 +230,6 @@ class star_db(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
     __swig_destroy__ = _beast.delete_star_db
     __del__ = lambda self: None
 
@@ -312,11 +262,8 @@ class star_db(_object):
 
     def DBG_(self, s):
         return _beast.star_db_DBG_(self, s)
-
-
 star_db_swigregister = _beast.star_db_swigregister
 star_db_swigregister(star_db)
-
 
 class star_fov(_object):
     __swig_setmethods__ = {}
@@ -368,14 +315,10 @@ class star_fov(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
     __swig_destroy__ = _beast.delete_star_fov
     __del__ = lambda self: None
-
-
 star_fov_swigregister = _beast.star_fov_swigregister
 star_fov_swigregister(star_fov)
-
 
 class star_query(_object):
     __swig_setmethods__ = {}
@@ -402,7 +345,6 @@ class star_query(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
     __swig_destroy__ = _beast.delete_star_query
     __del__ = lambda self: None
 
@@ -456,11 +398,8 @@ class star_query(_object):
 
     def DBG_(self, s):
         return _beast.star_query_DBG_(self, s)
-
-
 star_query_swigregister = _beast.star_query_swigregister
 star_query_swigregister(star_query)
-
 
 class constellation(_object):
     __swig_setmethods__ = {}
@@ -494,14 +433,10 @@ class constellation(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
     __swig_destroy__ = _beast.delete_constellation
     __del__ = lambda self: None
-
-
 constellation_swigregister = _beast.constellation_swigregister
 constellation_swigregister(constellation)
-
 
 class constellation_pair(_object):
     __swig_setmethods__ = {}
@@ -542,14 +477,10 @@ class constellation_pair(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
     __swig_destroy__ = _beast.delete_constellation_pair
     __del__ = lambda self: None
-
-
 constellation_pair_swigregister = _beast.constellation_pair_swigregister
 constellation_pair_swigregister(constellation_pair)
-
 
 class constellation_lt(_object):
     __swig_setmethods__ = {}
@@ -567,36 +498,23 @@ class constellation_lt(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
     __swig_destroy__ = _beast.delete_constellation_lt
     __del__ = lambda self: None
-
-
 constellation_lt_swigregister = _beast.constellation_lt_swigregister
 constellation_lt_swigregister(constellation_lt)
 
 
 def constellation_lt_s1(c1, c2):
     return _beast.constellation_lt_s1(c1, c2)
-
-
 constellation_lt_s1 = _beast.constellation_lt_s1
-
 
 def constellation_lt_s2(c1, c2):
     return _beast.constellation_lt_s2(c1, c2)
-
-
 constellation_lt_s2 = _beast.constellation_lt_s2
-
 
 def constellation_lt_p(c1, c2):
     return _beast.constellation_lt_p(c1, c2)
-
-
 constellation_lt_p = _beast.constellation_lt_p
-
-
 class constellation_db(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, constellation_db, name, value)
@@ -626,17 +544,13 @@ class constellation_db(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
     __swig_destroy__ = _beast.delete_constellation_db
     __del__ = lambda self: None
 
     def DBG_(self, s):
         return _beast.constellation_db_DBG_(self, s)
-
-
 constellation_db_swigregister = _beast.constellation_db_swigregister
 constellation_db_swigregister(constellation_db)
-
 
 class match_result(_object):
     __swig_setmethods__ = {}
@@ -715,7 +629,6 @@ class match_result(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
     __swig_destroy__ = _beast.delete_match_result
     __del__ = lambda self: None
 
@@ -751,11 +664,8 @@ class match_result(_object):
 
     def print_ori(self):
         return _beast.match_result_print_ori(self)
-
-
 match_result_swigregister = _beast.match_result_swigregister
 match_result_swigregister(match_result)
-
 
 class db_match(_object):
     __swig_setmethods__ = {}
@@ -778,12 +688,11 @@ class db_match(_object):
             self.this.append(this)
         except __builtin__.Exception:
             self.this = this
-
     __swig_destroy__ = _beast.delete_db_match
     __del__ = lambda self: None
-
-
 db_match_swigregister = _beast.db_match_swigregister
 db_match_swigregister(db_match)
 
 # This file is compatible with both classic and new-style classes.
+
+

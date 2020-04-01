@@ -41,8 +41,6 @@ if [ ! -d "$TESTDIR" ]; then
 	exit
 fi
 
-#data="$2" (access using $data)
-
 shift
 
 KILLPID=""
@@ -58,10 +56,14 @@ fi
 
 if [[ $CLIENT_TEST == 1 ]]; then
 	#time python2.7 'code being run' 'directory of stars' 'calibration text' 'year' 'median image' 'star text file'
-	# 'mode' 'num of cropped stars' 'seial connection'
+	# 'mode' 'num of cropped stars' 'seial connection (bool) [for testing]' 'take picture? (bool) [for testing]' 'crop images (bool) [for testing]'
+	
+	# values for testing are hardcoded below (NOT PASSED IN).  
+	num_stars="$2" # second argument
+	
 	#time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt track 5 || exit # serial connection
 	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt \
-	track 5 0 0 || exit # non-serial connection
+	track $num_stars 0 0 0|| exit
 fi
 
 if [[ $CALIBRATECAL == 1 ]]; then
@@ -69,9 +71,16 @@ if [[ $CALIBRATECAL == 1 ]]; then
 fi
 
 if [[ $IMG_TEST == 1 ]]; then
-	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt lis 5 || exit
+	#time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt lis 5 || exit
 	#python2.7 startracker.py $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png
 	#xfce4-terminal --tab --execute python2.7  client.py
+	
+	num_stars="$2"
+	
+	#time python2.7 'code being run' 'directory of stars' 'calibration text' 'year' 'median image' 'star text file'
+	# 'mode' 'num of cropped stars' 'seial connection (bool) [for testing]' 'take picture? (bool) [for testing]' 'crop images (bool) [for testing]'
+	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png $TESTDIR/stars.txt \
+	track $num_stars 0 0 0|| exit
 fi
 
 #if [[ $TRACK == 1 ]]; then

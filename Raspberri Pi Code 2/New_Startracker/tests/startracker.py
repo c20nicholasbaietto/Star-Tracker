@@ -86,7 +86,6 @@ def check_image(img):
     # Generate test parameters
     height, width, channels = img.shape
     total_pixels = height * width
-    ##print("height2: " + str(height))
     blur_check = int(total_pixels * 0.99996744)
     too_many_check = int(total_pixels * 0.99918619)
 
@@ -152,7 +151,6 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
             star_positions[i][1] += y_offset
             star_positions[i] = tuple(star_positions[i])
 
-        ##### Uncomment code below for multiple blacked out stars ######
         cv2.imwrite(directory + "/black" + str(pic_num) + "i.bmp", img)
         before = time()
         whiteFrame = 255 * np.ones((width, height, 3), np.uint8)
@@ -174,7 +172,6 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
         if my_track:
             img = np.clip(img.astype(np.int16) - whiteFrame, a_min=0, a_max=255).astype(np.uint8)
         cv2.imwrite(directory + "/black" + str(pic_num) + "f.bmp", img)
-    ################################################################
 
     result = check_image(img)
     # print(time())
@@ -217,17 +214,12 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
         # For the first pass, we only want to use the brightest MAX_FALSE_STARS + REQUIRED_STARS
         img_stars_n_brightest = img_stars.copy_n_brightest(beast.cvar.MAX_FALSE_STARS + beast.cvar.REQUIRED_STARS)
         img_const_n_brightest = beast.constellation_db(img_stars_n_brightest, beast.cvar.MAX_FALSE_STARS + 2, 1)
-        # print(C_DB)
         lis = beast.db_match(C_DB, img_const_n_brightest)
-        # print(lis)
     stars = []
     t_const = []
-    # print(num_stars)
     if num_stars > img_stars_n_brightest.size():
         num_stars = img_stars_n_brightest.size()
-    # print("size: " + str((img_stars_n_brightest.size())))
     for i in range(img_stars_n_brightest.size()):
-        # print("star" + str(i) + ": (" + str(img_stars_n_brightest.get_star(i).px) + ", " + str(img_stars_n_brightest.get_star(i).py) + ")")
         if i < num_stars:
             stars.append((img_stars_n_brightest.get_star(i).px, img_stars_n_brightest.get_star(i).py))
 
@@ -243,32 +235,6 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
         y = lis.winner.R21
         z = lis.winner.R31
         r = beast.cvar.MAXFOV / 2
-
-        stars_x = lis.winner.img_mask.s_px
-        stars_y = lis.winner.img_mask.s_py
-
-        star = lis.winner.from_match()
-        # print(lis.winner.size())
-        # print("here goes nothing: " + str(star.get_star(0).px) + "," + str(star.get_star(0).py))
-        # print("here goes nothing: " + str(star.get_star(1).px) + "," + str(star.get_star(1).py))
-        # print("here goes nothing: " + str(star.get_star(2).px) + "," + str(star.get_star(2).py))
-        # print("here goes nothing: " + str(star.get_star(3).px) + "," + str(star.get_star(3).py))
-        # print("here goes nothing: " + str(star.get_star(4).px) + "," + str(star.get_star(4).py))
-        # print("here goes nothing: " + str(star.get_star(5).px) + "," + str(star.get_star(5).py))
-        # print("here goes nothing: " + str(star.get_star(6).px) + "," + str(star.get_star(6).py))
-        # print("here goes nothing: " + str(star.get_star(7).px) + "," + str(star.get_star(7).py))
-        # print("here goes nothing: " + str(star.get_star(8).px) + "," + str(star.get_star(8).py))
-
-        ### stars ###
-        # stars = []
-        for i in range(0, len(stars_x)):
-            stars.append((stars_x[i], stars_y[i]))
-        #############
-
-        # print("lis.winner.x_values = " + str(stars_x))
-        # print("lis.winner.y_values = " + str(stars_y))
-        # print("stars = " + str(stars))
-        ## print("x = " + str(x) + "\ny = " + str(y) + "\nz = " + str(z) +"\nr = " + str(r))
 
         SQ_RESULTS.kdsearch(x, y, z, r, beast.cvar.THRESH_FACTOR * beast.cvar.IMAGE_VARIANCE)
 
@@ -323,8 +289,7 @@ def solve_image(directory, filepath, pic_num, MEDIAN_IMAGE, my_star_db, star_pos
         # connection.sendall("\n"+attitude+"\nTime: " + str(time() - start_time)+"\n")
         my_time = time() - start_time
         erythin = q + ";" + str(DEC * (180 / math.pi)) + ";" + str(RA * (180 / math.pi)) + ";" + str(
-            ORI * (180 / math.pi)) + ";" + \
-                  str(q1) + ";" + str(q2) + ";" + str(q3) + ";" + str(q4)
+            ORI * (180 / math.pi)) + ";" + str(q1) + ";" + str(q2) + ";" + str(q3) + ";" + str(q4)
         # print(erythin)
         # print(time())
         return (erythin, stars)

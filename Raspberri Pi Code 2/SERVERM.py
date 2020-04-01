@@ -30,21 +30,28 @@ while con=='y':
     AddR = CommRec[0]
     prevC = CommRec[1]
     CommB = CommRec[2]
+    num_stars = 5 # number of stars used in tracking mode
     
     if CommB == b'i':        
         print('Recieved Idle command')
+        continue
     elif CommB == b'l':
         print('Recieved LIS command')
-        os.system("./unit_test.sh -i Indoor_test_pointing")
+        cmd = "./unit_test.sh -i Indoor_test_pointing " + str(num_stars)
     elif CommB == b't':
         print('Recieved Tracking command')
-        os.system("./unit_test.sh -t Indoor_test_pointing")
+        cmd = "./unit_test.sh -t Indoor_test_pointing " + str(num_stars)
     elif CommB == b'c':
         print('Recieved Calibrate command')
-        os.system("./unit_test.sh -c Indoor_test_pointing")
+        cmd = "./unit_test.sh -c Indoor_test_pointing"
     elif CommB == b'r':
         print('Recieved Re-boot command')
-        os.system("shutdown /s /t 1")
+        cmd = "shutdown /s /t 1"
     else:
         print('Command Not Understood')
+        continue
+        
+    print(cmd)
+    
+    os.system(cmd)
 

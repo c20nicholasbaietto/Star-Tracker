@@ -4,24 +4,23 @@ from os.path import isfile, join
 from time import sleep, time
 import socket
 import sys
-import picamera
 from socket import error as socket_error
 import errno
 from fractions import Fraction
-from cam import take_picture, set_camera_specs
-
-# from calibrate.py
-#from os import listdir, system, environ
-#from os.path import isfile, join
 import cv2
 import numpy as np
-#import sys
 from astropy.io import fits
 from scipy import spatial
 import cPickle as pickle
 from shutil import copy2
 
-file_path = sys.argv[1] # open samples folder for calibration
+file_path = sys.argv[1] # directory for calibration folders
+take_pic = bool(int(sys.argv[2])) # use old images or take new pictures
+
+if take_pic:
+    import picamera
+    from cam import take_picture, set_camera_specs
+
 file_type = ".bmp"  # file type of the pictures
 #ADDR = "./socket"
 #s = socket.socket(socket.AF_UNIX,socket.SOCK_STREAM)
@@ -130,10 +129,10 @@ def basename(filename):
 #only do this part if we were run as a python script
 if __name__ == '__main__':
 
-    # Get images and generate median image
-    samplepath = sys.argv[1] + "/samples"
-    calsamplepath = sys.argv[1] + "/calibrated_samples"
-    allsamplepath = sys.argv[1] + "/all_samples"
+    # Establish directories to be written to
+    samplepath = file_path + "/samples"
+    calsamplepath = file_path + "/calibrated_samples"
+    allsamplepath = file_path + "/all_samples"
     
         
     # Load or create the star database
@@ -148,21 +147,23 @@ if __name__ == '__main__':
         pickle.dump(stardb, open("stardb.p", "wb"))
     
     astrometry_results = {}
-
-    # remove old samples data before calibration
-    print "\nClearing old sample data:"
-    system("rm -rfv " + samplepath + "/* ")
-    system("rm -rfv " + calsamplepath + "/* ")
-    system("rm -rfv " + allsamplepath + "* ")
-    print "Old sample data cleared."
+    
+    # if not taking pictures, old pictures will be used and the data will not be cleared
+    if take_pic:
+        # remove old samples data before calibration
+        print "\nClearing old sample data:"
+        system("rm -rfv " + samplepath + "/* ")
+        system("rm -rfv " + calsamplepath + "/* ")
+        system("rm -rfv " + allsamplepath + "* ")
+        print "Old sample data cleared."
+        
+        camera = picamera.PiCamera()
+        set_camera_specs(camera, False)
 
     # Remove old calibration data
     print "\nClearing old calibration data:--"
     system("rm -rfv " + file_path + "/calibration_data/* ")
     print "Old calibrate data cleared."
-
-    camera = picamera.PiCamera()
-    set_camera_specs(camera, False)
 
     # take the pictures for calibration until calibration complete (good_pics > req_pics)
     fail = False
@@ -175,22 +176,28 @@ if __name__ == '__main__':
             break
         
         image_name = samplepath + "/cal" + str(pic_number) + file_type  # name of calibration pictures
-        print "\nTaking picture in..."
-        for new_lag_time in range(lag_time, 0, -1):
-            print str(new_lag_time)
-            sleep(1)
-        take_picture(camera, image_name)
-        print "Picture taken."
+        if take_pic:
+            print "\nTaking picture in..."
+            for new_lag_time in range(lag_time, 0, -1):
+                print str(new_lag_time)
+                sleep(1)
+            take_picture(camera, image_name)
+            print "Picture taken."
+        else:
+            # copy a calibrated picture to samples folder
+            cal_image_name = calsamplepath + "/cal" + str(pic_number) + file_type  # name of calibration pictures
+            copy2(cal_image_name,samplepath)
         
-        # need to add pictures taken to a total pictures folder for a median image?
         skip_median_image = False
         image_names = [ f for f in listdir(calsamplepath) if isfile(join(calsamplepath, f)) ]
         num_images = len(image_names)
+        
         if good_pics == 0:
             skip_median_image = True
+        
         images = np.asarray([cv2.imread( join(calsamplepath,image_names[n]) ).astype(np.float32) for n in range(0, num_images)])
         median_image = np.median(images, axis=0)
-        cv2.imwrite(sys.argv[1] + "/median_image.png", median_image)
+        cv2.imwrite(file_path + "/median_image.png", median_image)
         
         image_names = [ f for f in listdir(samplepath) if isfile(join(samplepath, f)) ]
         num_images = len(image_names)
@@ -207,8 +214,7 @@ if __name__ == '__main__':
         print "Calibrating Picture."
         if not skip_median_image:
             images[0] -= median_image
-            #print "used median image"
-        image_name_cal = sys.argv[1] + "/calibration_data/" + basename(image_names[0]) + ".png"
+        image_name_cal = file_path + "/calibration_data/" + basename(image_names[0]) + ".png"
         img = np.clip(images[0], a_min = 0, a_max = 255).astype(np.uint8)
         cv2.imwrite(image_name_cal, img)
 
@@ -222,12 +228,10 @@ if __name__ == '__main__':
             copy2(image_name,calsamplepath)
             # copy picture to all_samples folder
             copy2(image_name,allsamplepath)
-            # hopefully will copy all files in samples folder to calibrated_samples folder
             print 'wcsinfo ' + basename(image_name_cal) + '.wcs  | tr [:lower:] [:upper:] | tr " " "=" | grep "=[0-9.-]*$" > ' + basename(image_name_cal) + '.solved'
             system('wcsinfo ' + basename(image_name_cal) + '.wcs  | tr [:lower:] [:upper:] | tr " " "=" | grep "=[0-9.-]*$" > ' + basename(image_name_cal) + '.solved')
             hdulist = fits.open(basename(image_name_cal) + ".corr")
             astrometry_results[image_names[0]] = np.array([[i['flux'], i['field_x'], i['field_y'], i['index_x'], i['index_y']] + angles2xyz(i['index_ra'], i['index_dec']) for i in hdulist[1].data])
-            # try this
         else:
             copy2(image_name,allsamplepath)
             # copy picture to all_samples folder
@@ -277,9 +281,9 @@ if __name__ == '__main__':
         
         POS_VARIANCE = np.mean(db_img_dist)
         
-        execfile(sys.argv[1] + "/calibration_data/" + basename(bestimage) + ".solved")
+        execfile(file_path + "/calibration_data/" + basename(bestimage) + ".solved")
         
-        f_calib = open(sys.argv[1] + "/calibration.txt", 'w')
+        f_calib = open(file_path + "/calibration.txt", 'w')
         f_calib.write("IMG_X=" + str(IMAGEW) + "\n")
         f_calib.write("IMG_Y= " + str(IMAGEH) + "\n")
         f_calib.write("PIXSCALE=" + str(PIXSCALE) + "\n")
@@ -297,5 +301,5 @@ if __name__ == '__main__':
         f_calib.close()
         
         print "Calibration finished"
-        print "calibration.txt and median_image.png are in " + sys.argv[1] + "\n"
-        system("cat " + sys.argv[1] + "/calibration.txt")
+        print "calibration.txt and median_image.png are in " + file_path + "\n"
+        system("cat " + file_path + "/calibration.txt")

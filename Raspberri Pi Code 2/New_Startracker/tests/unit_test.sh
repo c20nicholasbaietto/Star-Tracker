@@ -61,19 +61,20 @@ fi
 
 if [[ $CLIENT_TEST == 1 ]]; then
 	#time python2.7 'code being run' 'directory of stars' 'calibration text' 'year' 'median image' 'star text file'
-	# 'mode' 'num of cropped stars' 'seial connection' 'crop image'
+	# 'mode' 'num of cropped stars' 'seial connection' 'take pictures' 'crop image'
 	
-	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png \
+	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration_copy.txt 1991.25 $TESTDIR/median_image_copy.png \
 	track $NUM_STARS $SERIAL $TAKE_PIC $CROP || exit
 fi
 
 if [[ $CALIBRATECAL == 1 ]]; then
-	time python2.7 cal.py $TESTDIR || exit
+	#time python2.7 'code being run' 'directory for calibration' 'take pictures'
+	time python2.7 cal.py $TESTDIR $TAKE_PIC || exit
 fi
 
 if [[ $IMG_TEST == 1 ]]; then
 	#time python2.7 'code being run' 'directory of stars' 'calibration text' 'year' 'median image' 'star text file'
-	# 'mode' 'num of cropped stars' 'seial connection' 'crop image'
+	# 'mode' 'num of cropped stars' 'seial connection' 'take pictures' 'crop image (always 0 for lis)'
 	
 	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png \
 	lis $NUM_STARS $SERIAL $TAKE_PIC 0 || exit

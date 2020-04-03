@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 Capture Time: 1.19209289551e-06
 Processing Time: 0.0274140834808
 Total Time: 0.029275894165
+=======
+Capture Time: 2.86102294922e-06
+Processing Time: 0.993314027786
+Total Time: 0.995092153549
+>>>>>>> d710006b97fe04018a8b586ad0959b539e49cc41

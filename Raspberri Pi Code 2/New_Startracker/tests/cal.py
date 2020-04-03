@@ -150,15 +150,15 @@ if __name__ == '__main__':
     
     # if not taking pictures, old pictures will be used and the data will not be cleared
     if take_pic:
+        camera = picamera.PiCamera()
+        set_camera_specs(camera, False)
+        
         # remove old samples data before calibration
         print "\nClearing old sample data:"
         system("rm -rfv " + samplepath + "/* ")
         system("rm -rfv " + calsamplepath + "/* ")
-        system("rm -rfv " + allsamplepath + "* ")
+        system("rm -rfv " + allsamplepath + "/* ")
         print "Old sample data cleared."
-        
-        camera = picamera.PiCamera()
-        set_camera_specs(camera, False)
 
     # Remove old calibration data
     print "\nClearing old calibration data:--"

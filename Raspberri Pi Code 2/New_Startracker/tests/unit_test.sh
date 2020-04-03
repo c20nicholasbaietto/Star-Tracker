@@ -6,7 +6,7 @@ CALIBRATECAL=0
 IMG_TEST=0
 RECOMPILE=0
 
-while getopts ":citr" opt; do
+while getopts ":citrn" opt; do
   case $opt in
     c)
 	  CALIBRATECAL=1
@@ -20,6 +20,9 @@ while getopts ":citr" opt; do
     r)
 	  RECOMPILE=1
       ;;
+    #n)
+	#  CALIBRATE=1
+    #;;
    \?)
       echo "Usage: ./unit_test.sh [options] testdir [cmd]"
       echo -e ""
@@ -27,6 +30,7 @@ while getopts ":citr" opt; do
       echo -e "\t-t\tRun tracking mode"
       echo -e "\t-i\tRun lost in space mode"
       echo -e "\t-r\tRecompile the backend"
+      #echo -e "\t-n\tCalibrate camera (archived)"
       exit
       ;;
   esac
@@ -43,8 +47,8 @@ fi
 
 NUM_STARS="$2" # number of stars cropped in tracking mode
 SERIAL="$3" # are you sending data back over a serial connection? (1 = yes, 0 = no)
-TAKE_PIC=0 # are you using the camera to take pictures? (1 = yes, 0 = no)
-CROP=1 # are you cropping images for tracking mode? (1 = yes, 0 = no)
+TAKE_PIC="$4" # are you using the camera to take pictures? (1 = yes, 0 = no)
+CROP="$5" # are you cropping images for tracking mode? (1 = yes, 0 = no)
 
 shift
 
@@ -69,6 +73,7 @@ fi
 
 if [[ $CALIBRATECAL == 1 ]]; then
 	#time python2.7 'code being run' 'directory for calibration' 'take pictures'
+	#if take pictures is 0, then cal.py acts like calibrate_old.py in archived folder
 	time python2.7 cal.py $TESTDIR $TAKE_PIC || exit
 fi
 

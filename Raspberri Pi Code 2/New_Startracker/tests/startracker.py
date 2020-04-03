@@ -1,5 +1,5 @@
 # startracker.py - main front-end for the star tracker
-# modified by Nick Baietto, from the USAF Academy - Department of Astronuatics
+# modified by Nicholas Baietto, from the USAF Academy - Department of Astronuatics
 # based on code from Umair Khan, from the Portland State Aerospace Society
 # based on OpenStarTracker from Andrew Tennenbaum at the University of Buffalo
 

@@ -1,3 +1,8 @@
+# client_test2.py - will run lis mode or tracking mode for the startracker
+# returns - quaternion, declination, right ascention and orientation to user over serial
+# creates a text file with data above, time data, and a defined number of brightest stars in the image
+# modified by Nicholas Baietto, from the USAF Academy - Department of Astronuatics
+
 import os
 from os import system
 from time import sleep, time

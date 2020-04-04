@@ -1,3 +1,8 @@
+# client_test2.py - will run lis mode or tracking mode for the startracker
+# returns - quaternion, declination, right ascention and orientation to user over serial
+# creates a text file with data above, time data, and a defined number of brightest stars in the image
+# modified by Nicholas Baietto, from the USAF Academy - Department of Astronuatics
+
 import os
 from os import system
 from time import sleep, time
@@ -25,7 +30,7 @@ command = sys.argv[5]
 num_stars = int(sys.argv[6])
 is_serial = bool(int(sys.argv[7]))
 take_pic = bool(int(sys.argv[8]))
-crop = bool(int(sys.argv[9]))
+my_track = bool(int(sys.argv[9]))
 my_star_db = startracker.set_up(CONFIGFILE, YEAR)
 
 if take_pic:
@@ -77,7 +82,7 @@ while True:
         data = image_name.strip()  # Remove stray whitespace
         before_process_time = time()
         my_reply = startracker.solve_image(file_path, data, pic_num, MEDIAN_IMAGE, my_star_db, stars,
-                                           num_stars, crop)  # solve the image
+                                           num_stars, my_track)  # solve the image
         after_process_time = time()
         total_count += 1
         if type(my_reply) is tuple:  # if the image was solved, this will be true

@@ -31,27 +31,31 @@ while con=='y':
     prevC = CommRec[1]
     CommB = CommRec[2]
     num_stars = 5 # number of stars used in tracking mode
-    serial = 1 # using serial connection
+    serial = 1 # using serial connection (1 = yes, 0 = no)
+    take_pic = 0 # use camera (1 = yes, 0 = no) <- manually change this if you wish to use the camera over the serial connection
+    crop = 1 # crop images? (1 = yes, 0 = no) <- manually change if you wish to test effect of not cropping vs. cropping
+    # cropping images means you will take the 'num_stars' amount of brightest stars in the image and use those to solve.  
+    # This will increase your speed.  The only reason you should change crop to equal 0 is for testing purposes.
     
     if CommB == b'i':        
         print('Recieved Idle command')
         continue
     elif CommB == b'l':
         print('Recieved LIS command')
-        cmd = "./unit_test.sh -i Indoor_test_pointing " + str(num_stars) + " " + str(serial)
+        cmd = "./unit_test.sh -i Indoor_test_pointing " + str(num_stars) + " " + str(serial) + " " + str(take_pic) + " " + str(crop)
     elif CommB == b't':
         print('Recieved Tracking command')
-        cmd = "./unit_test.sh -t Indoor_test_pointing " + str(num_stars) + " " + str(serial)
+        cmd = "./unit_test.sh -t Indoor_test_pointing " + str(num_stars) + " " + str(serial) + " " + str(take_pic) + " " + str(crop)
     elif CommB == b'c':
         print('Recieved Calibrate command')
-        cmd = "./unit_test.sh -c Indoor_test_pointing"
+        cmd = "./unit_test.sh -c Indoor_test_pointing " + str(num_stars) + " " + str(serial) + " " + str(take_pic) + " " + str(crop)
     elif CommB == b'r':
         print('Recieved Re-boot command')
         cmd = "shutdown /s /t 1"
     else:
         print('Command Not Understood')
         continue
-        
+    
     print(cmd)
     
     os.system(cmd)

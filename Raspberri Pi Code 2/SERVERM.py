@@ -30,7 +30,7 @@ while con=='y':
     AddR = CommRec[0]
     prevC = CommRec[1]
     CommB = CommRec[2]
-    num_stars = 5 # number of stars used in tracking mode
+    num_stars = 5 # number of stars used in tracking mode (can change if need be otherwise leave at 5)
     serial = 1 # using serial connection (1 = yes, 0 = no)
     take_pic = 0 # use camera (1 = yes, 0 = no) <- manually change this if you wish to use the camera over the serial connection
     crop = 1 # crop images? (1 = yes, 0 = no) <- manually change if you wish to test effect of not cropping vs. cropping

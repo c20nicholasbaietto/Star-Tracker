@@ -2,8 +2,8 @@
 # server.py - builds command to run on startracker pi
 
 # You can also run the built command in the terminal in the "New_Startracker/tests/" 
-# directory if you so desire. A built command would look like "./unit_test.sh -t Indoor_test_pointing 5 0 0".
-# 5 = num_stars, 0 = not using the serial connection, 0 = not taking a picture (in that order).
+# directory if you so desire. A built command would look like "./unit_test.sh -t Indoor_test_pointing 5 0 0 1".
+# 5 = num_stars, 0 = not using the serial connection, 0 = not taking a picture, 1 = cropping image (in that order).
 # When running the command in the terminal, take out the quotes.
 
 import os

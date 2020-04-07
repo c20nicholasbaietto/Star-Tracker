@@ -49,6 +49,7 @@ NUM_STARS="$2" # number of stars cropped in tracking mode
 SERIAL="$3" # are you sending data back over a serial connection? (1 = yes, 0 = no)
 TAKE_PIC="$4" # are you using the camera to take pictures? (1 = yes, 0 = no)
 CROP="$5" # are you cropping images for tracking mode? (1 = yes, 0 = no)
+IMG_DIRECTORY="res480480" # this is the directory which images will be pulled from/put into
 
 shift
 
@@ -67,7 +68,7 @@ if [[ $CLIENT_TEST == 1 ]]; then
 	#time python2.7 'code being run' 'directory of stars' 'calibration text' 'year' 'median image' 'star text file'
 	# 'mode' 'num of cropped stars' 'seial connection' 'take pictures' 'crop image'
 	
-	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png \
+	time python2.7 client_test2.py $TESTDIR/$IMG_DIRECTORY $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png \
 	track $NUM_STARS $SERIAL $TAKE_PIC $CROP || exit
 fi
 
@@ -81,7 +82,7 @@ if [[ $IMG_TEST == 1 ]]; then
 	#time python2.7 'code being run' 'directory of stars' 'calibration text' 'year' 'median image' 'star text file'
 	# 'mode' 'num of cropped stars' 'seial connection' 'take pictures' 'crop image'
 	
-	time python2.7 client_test2.py $TESTDIR/res480480 $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png \
+	time python2.7 client_test2.py $TESTDIR/$IMG_DIRECTORY $TESTDIR/calibration.txt 1991.25 $TESTDIR/median_image.png \
 	lis $NUM_STARS $SERIAL $TAKE_PIC 0 || exit
 fi
 

@@ -1,0 +1,9 @@
+1) The first thing you will do is run the software test campaign as described above.  Afterwards, do the things below.
+
+2) Stop tracking mode with command over serial (not user input Ctrl-C):
+	a) Need to be able to stop tracking mode once it’s started. Currently the only way to 		stop tracking mode is by using CTRL-C in the terminal it’s being run in on the star 		tracker pi.
+	
+	b) Add the ability to pass in a duration for tracking mode.  After this duration the code 		should automatically stop tracking and await another command.
+
+3) Do not save all files and pictures and images.  Currently all the images taken are saved on the star tracker pi.  Ideally nothing will be saved on the star tracker and everything that needs to be saved will be sent to the flight computer.  You will need to make sure nothing is saved, and make sure everything that needs to be sent over the serial connection is sent over the serial connection.
+
